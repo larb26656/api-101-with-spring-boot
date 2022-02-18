@@ -1,5 +1,6 @@
 package com.example.api101withspringboot.api.student;
 
+import com.example.api101withspringboot.api.registration.RegistrationService;
 import com.example.api101withspringboot.dto.StudentDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,9 @@ public class StudentService {
 
     @Autowired
     private StudentRepository studentRepository;
+
+    @Autowired
+    private RegistrationService registrationService;
 
     public List<StudentDto> search(Connection conn) throws SQLException {
 
@@ -35,7 +39,12 @@ public class StudentService {
 
     public Long add(Connection conn, StudentDto dto) throws SQLException {
 
-        return studentRepository.add(conn, dto);
+        Long id = studentRepository.add(conn, dto);
+
+        // register
+        registrationService.add(conn, id);
+
+        return id;
 
     }
 
