@@ -1,0 +1,290 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: http://localhost:8080
+    description: Generated server url
+paths:
+  /api/v1/student:
+    get:
+      tags:
+        - student-controller
+      operationId: searchByName
+      parameters:
+        - name: name
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StudentDto'
+    put:
+      tags:
+        - student-controller
+      operationId: edit
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+    post:
+      tags:
+        - student-controller
+      operationId: add
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UpsertRes'
+  /api/v1/student/search:
+    post:
+      tags:
+        - student-controller
+      operationId: search
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StudentDto'
+  /api/mockup/v1/validator/test:
+    post:
+      tags:
+        - validator-test-controller
+      operationId: test
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidatorTestReq'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: number
+                format: double
+  /api/mockup/v1/parse/int:
+    post:
+      tags:
+        - validator-test-controller
+      operationId: parseToInt
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParseToIntReq'
+        required: true
+      responses:
+        '200':
+          description: OK
+  /api/calculator/v1/sum:
+    post:
+      tags:
+        - calculator-controller
+      operationId: sum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SumReq'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: number
+                format: double
+  /api/calculator/v1/plus:
+    post:
+      tags:
+        - calculator-controller
+      operationId: plus
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlusReq'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: number
+                format: double
+  /api/calculator/v1/minus:
+    post:
+      tags:
+        - calculator-controller
+      operationId: minus
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MinusReq'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: number
+                format: double
+  /api/calculator/v1/circle/area:
+    post:
+      tags:
+        - calculator-controller
+      operationId: areaOfACircle
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AreaOfACircleReq'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: number
+                format: double
+  /api/v1/student/{id}:
+    get:
+      tags:
+        - student-controller
+      operationId: getById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/StudentDto'
+    delete:
+      tags:
+        - student-controller
+      operationId: delete
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+components:
+  schemas:
+    StudentDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+    UpsertRes:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+    ValidatorTestReq:
+      required:
+        - name
+        - nickName
+      type: object
+      properties:
+        name:
+          type: string
+        nickName:
+          type: string
+        aboutMe:
+          maxLength: 200
+          minLength: 10
+          type: string
+        age:
+          maximum: 150
+          minimum: 18
+          type: integer
+          format: int32
+        email:
+          type: string
+    ParseToIntReq:
+      type: object
+      properties:
+        text:
+          type: string
+    SumReq:
+      type: object
+      properties:
+        numberList:
+          type: array
+          items:
+            type: number
+            format: double
+    PlusReq:
+      type: object
+      properties:
+        source:
+          type: number
+          format: double
+        target:
+          type: number
+          format: double
+    MinusReq:
+      type: object
+      properties:
+        source:
+          type: number
+          format: double
+        target:
+          type: number
+          format: double
+    AreaOfACircleReq:
+      type: object
+      properties:
+        radius:
+          type: number
+          format: double
